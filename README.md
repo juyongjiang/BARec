@@ -17,7 +17,7 @@ python DataProcessing.py
 ```
 
 ## Beauty
-**1. Reversely Pre-training and Short Sequence Augmentation**
+* Reversely Pre-training and Short Sequence Augmentation
 
 Pre-train the model and output 50 items for sequences with length <= 50.
 
@@ -28,7 +28,7 @@ python -u main.py --dataset=Beauty \
                   --reversed=1 --reversed_gen_num=50 --M=50 \ 
                   2>&1 | tee pre_train.log
 ```
-**2. Next-Item Prediction with Reversed-Pre-Trained Model and Augmented dataset**
+* Next-Item Prediction with Reversed-Pre-Trained Model and Augmented dataset
 
 ```
 python -u main.py --dataset=Beauty \
@@ -39,7 +39,7 @@ python -u main.py --dataset=Beauty \
 ```
 
 ## Cell_Phones_and_Accessories
-**1. Reversely Pre-training and Short Sequence Augmentation**
+* Reversely Pre-training and Short Sequence Augmentation
 
 Pre-train the model and output 50 items for sequences with length <= 50.
 
@@ -50,7 +50,7 @@ python -u main.py --dataset=Cell_Phones_and_Accessories \
                   --reversed=1 --reversed_gen_num=50 --M=50 \ 
                   2>&1 | tee pre_train.log
 ```
-**2. Next-Item Prediction with Reversed-Pre-Trained Model and Augmented dataset**
+* Next-Item Prediction with Reversed-Pre-Trained Model and Augmented dataset
 
 ```
 python -u main.py --dataset=Cell_Phones_and_Accessories \
@@ -65,7 +65,9 @@ python -u main.py --dataset=Cell_Phones_and_Accessories \
 To simplify the process, you can run the following command:
 
 ```bash
-sh run_pre_train.sh 
-sh run_fine_tuning.sh
+sh run_pre_training.sh 
 ```
 
+```bash
+sh run_fine_tuning.sh
+```
