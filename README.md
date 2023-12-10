@@ -14,7 +14,8 @@ The data split is done in the `leave-one-out` setting. Make sure you download th
 python DataProcessing.py
 ```
 
-## Amazon Beauty 
+## Pre-training & Fine-tuning
+### Amazon Beauty 
 * Reversely Pre-training and Short Sequence Augmentation
     ```
     python -u main.py --dataset=Beauty \
@@ -32,7 +33,7 @@ python DataProcessing.py
                     2>&1 | tee fine_tune.log
     ```
 
-## Amazon Cell_Phones_and_Accessories
+### Amazon Cell_Phones_and_Accessories
 * Reversely Pre-training and Short Sequence Augmentation
     ```
     python -u main.py --dataset=Cell_Phones_and_Accessories \
@@ -50,8 +51,7 @@ python DataProcessing.py
                     2>&1 | tee fine_tune.log
     ```
 
-## Pre-training & Fine-tuning
-
+### Shell Command
 To simplify the process, you can run the following command:
 
 ```bash
