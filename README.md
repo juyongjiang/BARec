@@ -56,8 +56,5 @@ To simplify the process, you can run the following command:
 
 ```bash
 sh run_pre_training.sh 
-```
-
-```bash
 sh run_fine_tuning.sh
 ```
