@@ -1,4 +1,4 @@
-# BARec: Improving Sequential Recommendations via Pre-training with Bidirectional Temporal Data Augmentation
+# BARec: Improving Sequential Recommendations via Bidirectional Temporal Data Augmentation with Pre-training
 
 ## Environment
 
