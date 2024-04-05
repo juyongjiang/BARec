@@ -1,5 +1,13 @@
 # BARec: Improving Sequential Recommendations via Bidirectional Temporal Data Augmentation with Pre-training
 
+## Overview
+
+<p align="center" width="90%">
+    <img src="BARec.jpg" alt="The architecture of our proposed BARec framework." style="width: 50%; min-width: 100px; display: block; margin: auto;">
+    <br>
+    <b>Figure 1.</b> The architecture of our proposed BARec framework.
+</p>
+
 ## Environment
 
 ```bash
