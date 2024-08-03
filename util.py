@@ -15,7 +15,7 @@ import time
 
 # Ks = [1, 5, 10, 20, 50, 100]
 Ks = [1, 5, 10]
-cores = multiprocessing.cpu_count() // 2
+cores = multiprocessing.cpu_count() #// 2
 
 # Set color for tqdm
 def set_color(log, color, highlight=True):
