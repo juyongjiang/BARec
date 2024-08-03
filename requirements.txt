@@ -1,4 +1,0 @@
-python==3.6
-tensorflow-gpu==1.15.5
-tqdm
-scikit-learn

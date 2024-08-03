@@ -11,14 +11,17 @@
 ## Environment
 
 ```bash
-conda create -n barec python=3.6
-pip install tensorflow-gpu==1.15.5
-pip install tqdm
-pip install scikit-learn
+conda create -n barec python=3.8.8
+conda activate barec
 
-or 
+pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
+pip install nvidia-tensorflow==1.15.5+nv21.07
 
-pip install -r requirements.txt
+pip install protobuf==3.15.8
+pip install tqdm==4.58.0
+pip install scikit-learn==0.24.1
+pip install numpy==1.18.5
+pip install scipy==1.4.1
 ```
 
 ## Datasets Preparation
@@ -78,4 +81,17 @@ sh run_pre_training.sh
 sh run_fine_tuning.sh
 ```
 
+## Citation
+If you use the data or code in this repo, please cite the repo.
 
+```
+@misc{jiang2024improvingsequentialrecommendationsbidirectional,
+      title={Improving Sequential Recommendations via Bidirectional Temporal Data Augmentation with Pre-training}, 
+      author={Juyong Jiang and Peiyan Zhang and Yingtao Luo and Chaozhuo Li and Jaeboum Kim and Kai Zhang and Senzhang Wang and Sunghun Kim},
+      year={2024},
+      eprint={2112.06460},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2112.06460}, 
+}
+```
