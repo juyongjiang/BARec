@@ -1,6 +1,7 @@
 import gzip
 from collections import defaultdict
 from datetime import datetime
+import numpy as np
 import os
 import copy
 import json
@@ -16,21 +17,22 @@ countU = defaultdict(lambda: 0)
 countP = defaultdict(lambda: 0)
 line = 0
 
-DATASET = 'Cell_Phones_and_Accessories'
-dataname = '/home/xxx/projects/datasets/reviews_{}_5.json.gz'.format(DATASET)
+DATASET = 'Yelp' # 'Sports_and_Outdoors' # 'Cell_Phones_and_Accessories'
+dataname = './reviews_{}_5.json.gz'.format(DATASET)
 #dataname = '/home/xxx/projects/datasets/newamazon_reviews/{}.json.gz'.format(DATASET)
+
 if not os.path.isdir('./'+DATASET):
     os.mkdir('./'+DATASET)
 train_file = './'+DATASET+'/train.txt'
 valid_file = './'+DATASET+'/valid.txt'
 test_file = './'+DATASET+'/test.txt'
+
 imap_file = './'+DATASET+'/imap.json'
 umap_file = './'+DATASET+'/umap.json'
 
 train_reverse_file = './'+DATASET+'/train_reverse.txt'
 valid_reverse_file = './'+DATASET+'/valid_reverse.txt'
 test_reverse_file = './'+DATASET+'/test_reverse.txt'
-
 
 
 for l in parse(dataname):
@@ -51,8 +53,6 @@ for l in parse(dataname):
     asin = l['asin']
     rev = l['reviewerID']
     time = l['unixReviewTime']
-    #if countU[rev] < 5 or countP[asin] < 5:
-    #    continue
 
     if rev in usermap:
         userid = usermap[rev]
@@ -61,6 +61,7 @@ for l in parse(dataname):
         usermap[rev] = userid
         User[userid] = []
         usernum += 1
+        
     if asin in itemmap:
         itemid = itemmap[asin]
     else:
@@ -68,7 +69,6 @@ for l in parse(dataname):
         itemmap[asin] = itemid
         itemnum += 1
     User[userid].append([itemid, time])
-# sort reviews in User according to time
 
 
 with open(imap_file, 'w') as f:
@@ -77,6 +77,7 @@ with open(imap_file, 'w') as f:
 with open(umap_file, 'w') as f:
     json.dump(usermap, f)
 
+# sort reviews in User according to time
 for userid in User.keys():
     User[userid].sort(key=lambda x: x[1])
 
@@ -135,13 +136,23 @@ writetofile(user_valid_reverse, valid_reverse_file)
 writetofile(user_test_reverse, test_reverse_file)
 
 num_instances = sum([len(ilist) for _, ilist in User.items()])
+user_count_list = list(countU.values())
+user_avg, user_min, user_max = np.mean(user_count_list), np.min(user_count_list), np.max(user_count_list)
+item_count_list = list(countP.values())
+item_avg, item_min, item_max = np.mean(item_count_list), np.min(item_count_list), np.max(item_count_list)
+
 print('total user: ', len(User))
-print('total instances: ', num_instances)
 print('total items: ', itemnum)
+print('total interactions: ', num_instances)
+print(f'user_avg: {user_avg}, user_min: {user_min}, user_max: {user_max}')
+print(f'item_avg: {item_avg}, item_min: {item_min}, item_max: {item_max}')
 print('density: ', num_instances / (len(User) * itemnum))
+
+
 print('valid #users: ', len(user_valid))
 numvalid_instances = sum([len(ilist) for _, ilist in user_valid.items()])
 print('valid instances: ', numvalid_instances)
+
 numtest_instances = sum([len(ilist) for _, ilist in user_test.items()])
 print('test #users: ', len(user_test))
 print('test instances: ', numtest_instances)

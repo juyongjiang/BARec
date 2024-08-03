@@ -1,5 +1,8 @@
 *.pyc
 # *.log
+finetuned_models/
+*.log
+rank_results/
 *.egg-info/
 __pycache__/
 *.egg-info/

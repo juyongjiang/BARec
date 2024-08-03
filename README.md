@@ -11,12 +11,19 @@
 ## Environment
 
 ```bash
+conda create -n barec python=3.6
+pip install tensorflow-gpu==1.15.5
+pip install tqdm
+pip install scikit-learn
+
+or 
+
 pip install -r requirements.txt
 ```
 
 ## Datasets Preparation
 **Benchmarks**: Amazon Review datasets Beauty, Movie Lens and Cell_Phones_and_Accessories. 
-The data split is done in the `leave-one-out` setting. Make sure you download the datasets from the [link](https://jmcauley.ucsd.edu/data/amazon/). Please, use the `DataProcessing.py` under the `data/`, and make sure you change the DATASET variable value to your dataset name, then you run:
+The data split is done in the `leave-one-out` setting. Make sure you download the datasets from the [link](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html). Please, use the `DataProcessing.py` under the `data/`, and make sure you change the DATASET variable value to your dataset name, then you run:
 
 ```
 python DataProcessing.py
@@ -24,39 +31,43 @@ python DataProcessing.py
 
 ## Pre-training & Fine-tuning
 ### Amazon Beauty 
-* Reversely Pre-training and Short Sequence Augmentation
+* Reversely model pre-training and short sequence augmentation with generated pseudo-prior items
     ```
     python -u main.py --dataset=Beauty \
                     --lr=0.001 --maxlen=100 --dropout_rate=0.7 --evalnegsample=100 \
                     --hidden_units=128 --num_blocks=2 --num_heads=4 \
-                    --reversed=1 --reversed_gen_num=50 --M=50 \ 
-                    2>&1 | tee pre_train.log
+                    --reversed=1 --reversed_gen_num=20 --M=20 \
+                    --lambda_coef=0.4 \
+                    2>&1 | tee pre_train_beauty.log   
     ```
-* Next-Item Prediction with Reversed-Pre-Trained Model and Augmented dataset
+* Fine-tuning reversed pre-trained model with augmented sequential dataset for sequential recommendation
     ```
     python -u main.py --dataset=Beauty \
                     --lr=0.001 --maxlen=100 --dropout_rate=0.7 --evalnegsample=100 \
                     --hidden_units=128 --num_blocks=2 --num_heads=4 \
-                    --reversed_pretrain=1 --aug_traindata=47 --M=50 \
-                    2>&1 | tee fine_tune.log
+                    --reversed_pretrain=1 --aug_traindata=15 --M=18 \
+                    --alpha_coef=1.0 --clip_k=12 \
+                    2>&1 | tee fine_tune_beauty.log
     ```
 
 ### Amazon Cell_Phones_and_Accessories
-* Reversely Pre-training and Short Sequence Augmentation
+* Reversely model pre-training and short sequence augmentation with generated pseudo-prior items
     ```
     python -u main.py --dataset=Cell_Phones_and_Accessories \
                     --lr=0.001 --maxlen=100 --dropout_rate=0.5 --evalnegsample=100 \
                     --hidden_units=32 --num_blocks=2 --num_heads=2 \
-                    --reversed=1 --reversed_gen_num=50 --M=50 \ 
-                    2>&1 | tee pre_train.log
+                    --reversed=1 --reversed_gen_num=20 --M=20 \
+                    --lambda_coef=0.3 \
+                    2>&1 | tee pre_train_phones.log
     ```
-* Next-Item Prediction with Reversed-Pre-Trained Model and Augmented dataset
+* Fine-tuning reversed pre-trained model with augmented sequential dataset for sequential recommendation
     ```
     python -u main.py --dataset=Cell_Phones_and_Accessories \
                     --lr=0.001 --maxlen=100 --dropout_rate=0.5 --evalnegsample=100 \
-                    --hidden_units=128 --num_blocks=2 --num_heads=2 \
-                    --reversed_pretrain=1 --aug_traindata=47 --M=50 \
-                    2>&1 | tee fine_tune.log
+                    --hidden_units=32 --num_blocks=2 --num_heads=2 \
+                    --reversed_pretrain=1 --aug_traindata=17 --M=18 \
+                    --alpha_coef=0.2 --clip_k=12 \
+                    2>&1 | tee fine_tune_phones.log
     ```
 
 ### Shell Command
@@ -66,3 +77,5 @@ To simplify the process, you can run the following command:
 sh run_pre_training.sh 
 sh run_fine_tuning.sh
 ```
+
+

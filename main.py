@@ -12,37 +12,6 @@ from sampler import WarpSampler
 from model import Model
 from util import set_color, data_load, data_augment, evaluate, record_loss
 
-'''
-== Pre-train (Beauty & Phones)
-python -u main.py --dataset=Beauty \
-                  --lr=0.001 --maxlen=100 --dropout_rate=0.7 --evalnegsample=100 \
-                  --hidden_units=128 --num_blocks=2 --num_heads=4 \
-                  --reversed=1 --reversed_gen_num=20 --M=20 \
-                  --lambda_coef=1.0 \
-                  2>&1 | tee pre_train_beauty.log
-
-python -u main.py --dataset=Cell_Phones_and_Accessories \
-                  --lr=0.001 --maxlen=100 --dropout_rate=0.5 --evalnegsample=100 \
-                  --hidden_units=32 --num_blocks=2 --num_heads=2 \
-                  --reversed=1 --reversed_gen_num=20 --M=20 \ 
-                  --lambda_coef=1.0 \
-                  2>&1 | tee pre_train_phones.log
-
-== Fine-tuning (Beauty & Phones)
-python -u main.py --dataset=Beauty \
-                  --lr=0.001 --maxlen=100 --dropout_rate=0.7 --evalnegsample=100 \
-                  --hidden_units=128 --num_blocks=2 --num_heads=4 \
-                  --reversed_pretrain=1 --aug_traindata=15 --M=18 \
-                  --alpha_coef=1.0 --clip_k=12 \
-                  2>&1 | tee fine_tune_beauty.log
-
-python -u main.py --dataset=Cell_Phones_and_Accessories \
-                  --lr=0.001 --maxlen=100 --dropout_rate=0.5 --evalnegsample=100 \
-                  --hidden_units=32 --num_blocks=2 --num_heads=2 \
-                  --reversed_pretrain=1 --aug_traindata=17 --M=18 \
-                  --alpha_coef=0.2 --clip_k=12 \
-                  2>&1 | tee fine_tune_phones.log
-'''
 
 # argument
 def get_arguments():
@@ -60,7 +29,7 @@ def get_arguments():
     parser.add_argument('--hidden_units', default=50, type=int)
     parser.add_argument('--num_blocks', default=2, type=int)
     parser.add_argument('--num_epochs', default=200, type=int)
-    parser.add_argument('--num_heads', default=1, type=int)
+    parser.add_argument('--num_heads', default=2, type=int)
     parser.add_argument('--dropout_rate', default=0.5, type=float)
     # hyper
     parser.add_argument('--lambda_coef', default=1.0, type=float)
@@ -78,6 +47,9 @@ def get_arguments():
 
 if __name__ == '__main__':
     args = get_arguments()
+    for arg, value in vars(args).items():
+        print(f'{arg}: {value}')
+        
     # load augmented dataset
     if not os.path.exists(os.path.join('./aug_data', args.dataset)):
         os.makedirs(os.path.join('./aug_data', args.dataset))
@@ -117,11 +89,11 @@ if __name__ == '__main__':
 
     model_signature = '{}_gen_num_{}'.format(config_signature, 50)
 
-    aug_data_signature = './aug_data/{}/{}_gen_num_{}_M_{}'.format(
+    aug_data_signature = './aug_data/{}/{}_gen_num_20_M_20'.format(
                         args.dataset,
-                        config_signature,
-                        args.reversed_gen_number,
-                        args.M)
+                        config_signature,)
+                        # args.reversed_gen_number,
+                        # args.M)
     print(aug_data_signature)
 
     ## create a new session
@@ -204,7 +176,7 @@ if __name__ == '__main__':
                                    model.pos_origin: pos_origin,
                                    model.neg_origin: neg_origin,  
                                    model.is_training: True})  # obtain scalar value
-                    np.save('{}_bicat_embs'.format(args.dataset), embs_table)
+                    # np.save('{}_bicat_embs'.format(args.dataset), embs_table)
             # print(kl_loss)
             # print(loss_aug)
             # print(loss_origin)
@@ -222,7 +194,13 @@ if __name__ == '__main__':
             if (epoch % 20 == 0 and epoch >= 200) or epoch == args.num_epochs:
                 t1 = time.time() - t0
                 T += t1
-
+                eval_start = time.time()
+                
+                if not os.path.exists('./finetuned_models/'+args.dataset):
+                    os.makedirs('./finetuned_models/'+args.dataset)
+                saver.save(sess, './finetuned_models/'+args.dataset+'/'+model_signature+'.ckpt')
+                print(f"model saved successfully! {'./finetuned_models/'+args.dataset+'/'+model_signature+'.ckpt'} ...")
+                
                 print("start testing...")
                 t_test, t_test_short_seq, t_test_short37_seq, \
                 t_test_short720_seq, t_test_medium2050_seq, \
@@ -238,16 +216,18 @@ if __name__ == '__main__':
                 #            f.write(json.dumps(eachpred) + '\n')
 
                 if not (args.reversed == 1):  # fine-turing 
-                    t_valid, t_valid_short_seq, t_valid_short37_seq, \
-                    t_valid_short720_seq, t_valid_medium2050_seq, \
-                    t_valid_long_seq, valid_rankitems = evaluate(model, dataset, args, sess, "valid")
-
+                    # not useful
+                    # t_valid, t_valid_short_seq, t_valid_short37_seq, \
+                    # t_valid_short720_seq, t_valid_medium2050_seq, \
+                    # t_valid_long_seq, valid_rankitems = evaluate(model, dataset, args, sess, "valid")
+                    print(f'evaluation time: {(time.time() - eval_start)}s')
                     print('epoch: ' + str(epoch) + ' testall: ' + str(t_test))
-                    print('epoch: ' + str(epoch) + ' testshort: ' + str(t_test_short_seq))
-                    print('epoch: ' + str(epoch) + ' testshort37: ' + str(t_test_short37_seq))
-                    print('epoch: ' + str(epoch) + ' testshort720: ' + str(t_test_short720_seq))
-                    print('epoch: ' + str(epoch) + ' testmedium2050: ' + str(t_test_medium2050_seq))
-                    print('epoch: ' + str(epoch) + ' testlong: ' + str(t_test_long_seq))
+                    if args.evalnegsample != -1:
+                        print('epoch: ' + str(epoch) + ' testshort: ' + str(t_test_short_seq))
+                        print('epoch: ' + str(epoch) + ' testshort37: ' + str(t_test_short37_seq))
+                        print('epoch: ' + str(epoch) + ' testshort720: ' + str(t_test_short720_seq))
+                        print('epoch: ' + str(epoch) + ' testmedium2050: ' + str(t_test_medium2050_seq))
+                        print('epoch: ' + str(epoch) + ' testlong: ' + str(t_test_long_seq))
                 else:
                     print('epoch: ' + str(epoch) + ' test: ' + str(t_test)) # it is wrong and not necessary
 
