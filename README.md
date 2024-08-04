@@ -17,16 +17,14 @@ conda activate barec
 pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 pip install nvidia-tensorflow==1.15.5+nv21.07 
 # In case, it raises the `ERROR: Could not find a version that satisfies the requirement absl-py>=0.9.0 (from nvidia-tensorflow) (from versions: none)`.
-# Please add the following indexes URL to your `/home/john/.config/pip/pip.conf`
-```bash
-[global]
-no-cache-dir = true
-index-url = https://pypi.org/simple
-extra-index-url =
-                  https://pypi.ngc.nvidia.com
-trusted-host =
-               pypi.ngc.nvidia.com
-```
+# Please add the following indexes URL to your `/home/john/.config/pip/pip.conf`:
+# [global]
+# no-cache-dir = true
+# index-url = https://pypi.org/simple
+# extra-index-url =
+#                   https://pypi.ngc.nvidia.com
+# trusted-host =
+#                pypi.ngc.nvidia.com
 
 pip install protobuf==3.15.8
 pip install tqdm==4.58.0
