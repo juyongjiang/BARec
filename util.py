@@ -96,10 +96,14 @@ def augdata_load(aug_filename):
 
 def data_load(data_name, args):
     reverseornot = args.reversed == 1 # 1: pre-training, 0: fine-tuning
-
-    train_file = f"./data/{data_name}/train.txt"
-    valid_file = f"./data/{data_name}/valid.txt"
-    test_file = f"./data/{data_name}/test.txt"
+    if not reverseornot:
+        train_file = f"./data/{data_name}/train.txt"
+        valid_file = f"./data/{data_name}/valid.txt"
+        test_file = f"./data/{data_name}/test.txt"
+    else:
+        train_file = f"./data/{data_name}/train_reverse.txt"
+        valid_file = f"./data/{data_name}/valid_reverse.txt"
+        test_file = f"./data/{data_name}/test_reverse.txt"
 
     original_train = None
     augdata = None
@@ -415,7 +419,7 @@ def evaluate(model, dataset, args, sess, testorvalid):
                 long_seq_test_allitems.append(test_item_idx[0])
 
 
-        rankeditem_oneuserids = [int(test_item_idx[i]) for i in list((-1*np.array(unk_predictions)).argsort())]
+        rankeditem_oneuserids = [int(test_item_idx[i]) for i in list((-1*np.array(unk_predictions)).argsort())] # 预测的结果，是已经排好顺序了的，从大到小
         rankeditem_scores = [unk_predictions[i] for i in list((-1*np.array(unk_predictions)).argsort())]
 
         # {user: user_id, label: item_id, predicted: item_ids}

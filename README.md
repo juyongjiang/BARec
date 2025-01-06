@@ -3,7 +3,7 @@
 ## Overview
 
 <p align="center">
-  <img src="BARec.jpg" alt="The architecture of our proposed BARec framework" width="700">
+  <img src="assets/BARec.jpg" alt="The architecture of our proposed BARec framework" width="700">
   <br>
   <b>Figure 1.</b> The architecture of our proposed BARec framework.
 </p>
@@ -32,6 +32,12 @@ pip install tqdm==4.58.0
 pip install scikit-learn==0.24.1
 pip install numpy==1.18.5
 pip install scipy==1.4.1
+```
+
+To test the available TF GPUs, please run the following command:
+
+```bash
+python tf_gpus_detec.py
 ```
 
 ## Datasets Preparation

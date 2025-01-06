@@ -1,4 +1,5 @@
 # Fine-tuning (Beauty & Phones)
+# 100 negative sampling evaluation
 # python -u main.py --dataset=Beauty \
 #                   --lr=0.001 --maxlen=100 --dropout_rate=0.7 --evalnegsample=100 \
 #                   --hidden_units=128 --num_blocks=2 --num_heads=4 \
@@ -13,6 +14,7 @@
 #                   --alpha_coef=0.2 --clip_k=12 \
 #                   2>&1 | tee fine_tune_phones.log
 
+# Full rank evaluation
 CUDA_VISIBLE_DEVICES=0 python -u main.py --dataset=Beauty \
                   --lr=0.001 --maxlen=100 --dropout_rate=0.7 --evalnegsample=-1 \
                   --hidden_units=128 --num_blocks=2 --num_heads=4 \

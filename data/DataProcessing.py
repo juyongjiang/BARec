@@ -17,12 +17,13 @@ countU = defaultdict(lambda: 0)
 countP = defaultdict(lambda: 0)
 line = 0
 
-DATASET = 'Yelp' # 'Sports_and_Outdoors' # 'Cell_Phones_and_Accessories'
-dataname = './reviews_{}_5.json.gz'.format(DATASET)
+DATASET = 'TenRec' # 'Beauty', 'Sports_and_Outdoors', 'Cell_Phones_and_Accessories', 'Yelp', 'TenRec'
+dataname = './Raw/reviews_{}_5.json.gz'.format(DATASET)
 #dataname = '/home/xxx/projects/datasets/newamazon_reviews/{}.json.gz'.format(DATASET)
 
 if not os.path.isdir('./'+DATASET):
     os.mkdir('./'+DATASET)
+    
 train_file = './'+DATASET+'/train.txt'
 valid_file = './'+DATASET+'/valid.txt'
 test_file = './'+DATASET+'/test.txt'
@@ -112,11 +113,11 @@ for user in User_forreversed:
         user_valid_reverse[user] = []
         user_test_reverse[user] = []
     else:
-        user_train_reverse[user] = User[user][:-2]
+        user_train_reverse[user] = User_forreversed[user][:-2]
         user_valid_reverse[user] = []
-        user_valid_reverse[user].append(User[user][-2])
+        user_valid_reverse[user].append(User_forreversed[user][-2])
         user_test_reverse[user] = []
-        user_test_reverse[user].append(User[user][-1])
+        user_test_reverse[user].append(User_forreversed[user][-1])
 
 print(usernum, itemnum)
 
