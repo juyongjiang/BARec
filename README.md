@@ -49,6 +49,9 @@ python DataProcessing.py
 ```
 
 ## Pre-training & Fine-tuning
+
+The training log can be found in the `log/` folder.
+
 ### Amazon Beauty 
 * Reversely model pre-training and short sequence augmentation with generated pseudo-prior items
     ```
@@ -100,7 +103,7 @@ sh run_fine_tuning.sh
 ## Citation
 If you use the data or code in this repo, please cite the repo.
 
-```
+```BibTex
 @misc{jiang2024improvingsequentialrecommendationsbidirectional,
       title={Improving Sequential Recommendations via Bidirectional Temporal Data Augmentation with Pre-training}, 
       author={Juyong Jiang and Peiyan Zhang and Yingtao Luo and Chaozhuo Li and Jaeboum Kim and Kai Zhang and Senzhang Wang and Sunghun Kim},
