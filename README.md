@@ -50,7 +50,7 @@ python DataProcessing.py
 
 ## Pre-training & Fine-tuning
 
-The training log can be found in the `log/` folder.
+The training log can be found in the `[log/](./log/)` folder.
 
 ### Amazon Beauty 
 * Reversely model pre-training and short sequence augmentation with generated pseudo-prior items
