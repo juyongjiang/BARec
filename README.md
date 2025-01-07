@@ -104,7 +104,7 @@ sh run_fine_tuning.sh
 If you use the data or code in this repo, please cite the repo.
 
 ```BibTex
-@misc{jiang2024improvingsequentialrecommendationsbidirectional,
+@misc{jiang2021sequential,
       title={Improving Sequential Recommendations via Bidirectional Temporal Data Augmentation with Pre-training}, 
       author={Juyong Jiang and Peiyan Zhang and Yingtao Luo and Chaozhuo Li and Jaeboum Kim and Kai Zhang and Senzhang Wang and Sunghun Kim},
       year={2024},
