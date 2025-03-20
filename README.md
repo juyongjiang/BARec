@@ -1,5 +1,9 @@
 # BARec: Improving Sequential Recommendations via Bidirectional Temporal Data Augmentation with Pre-training
 
+> [!IMPORTANT]
+> **Good news! :tada: Our paper has been successfully accepted by TKDE. :fire::fire::fire:**
+> 
+
 ## Overview
 
 <p align="center">
